@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # NetTrace - Forensic Metadata Analysis Tool
 
 NetTrace is a lawful, non-intrusive forensic tool that analyzes network metadata from encrypted communications to assist investigators in identifying remote communicating parties. It processes PCAP files, extracts flow statistics, profiles remote hosts behaviorally, and highlights suspicious patterns—all without decrypting any content.
@@ -16,3 +17,6 @@ NetTrace is a lawful, non-intrusive forensic tool that analyzes network metadata
    ```bash
    git clone https://github.com/yourname/NetTrace.git
    cd NetTrace
+=======
+# nettrace
+>>>>>>> c7125106b0f1afe5c6bfc939c303da86ce275fdf
