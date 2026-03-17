@@ -43,16 +43,6 @@ class FlowAnalyzer:
             print(f"Warning: Missing columns for flow reconstruction: {missing}")
             return pd.DataFrame()
 
-        for _, pkt in self.packet_df.iterrows():
-            src_ip = pkt.get('src_ip', '')
-            dst_ip = pkt.get('dst_ip', '')
-            src_port = int(pkt['src_port']) if pd.notna(pkt.get('src_port')) else 0
-            dst_port = int(pkt['dst_port']) if pd.notna(pkt.get('dst_port')) else 0
-            proto    = int(pkt['protocol']) if pd.notna(pkt.get('protocol')) else 0
-            app = pkt.get('app_identified', 'unknown')
-            ts = pkt.get('timestamp', 0)
-            length = int(pkt.get('length', 0))
-
             if not src_ip or not dst_ip or ts <= 0:
                 continue
 
