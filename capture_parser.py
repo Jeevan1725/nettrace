@@ -106,7 +106,7 @@ class PCAPParser:
                 
                 pkt_info = {
                     'packet_num': i,
-                    'timestamp': float(packet.time),
+                    'timestamp': float(packet.time) if packet.time is not None else 0.0,
                     'src_ip': src_ip,
                     'dst_ip': dst_ip,
                     'protocol': ip_layer.proto,
@@ -387,9 +387,15 @@ class PCAPParser:
             for conv in conversations.values():
                 # Include if it's meaningful traffic
                 if conv['packet_count'] >= 4:
+                    duration = conv['last_seen'] - conv['first_seen']
                     # Calculate if this is a messaging conversation
-                    is_messaging = (conv['app_used'] in ['whatsapp', 'telegram', 'signal'] or 
-                                   conv['packet_count'] > 20)
+                    is_messaging = (
+                        conv['packet_count'] > 15 and
+                        duration < 600 and
+                        conv['bytes_transferred'] < 500000
+                    )
+                    conv['peer_device'] = conv['is_local_both'] and conv['packet_count'] >= 3
+                    conv['connection_rate'] = conv['packet_count'] / max(duration, 1)
                     
                     result.append({
                         'ip_a': conv['ip_a'],
@@ -399,11 +405,13 @@ class PCAPParser:
                         'first_seen': conv['first_seen'],
                         'last_seen': conv['last_seen'],
                         'app_used': conv['app_used'],
-                        'duration': conv['last_seen'] - conv['first_seen'],
+                        'duration': duration,
                         'is_local_both': conv['is_local_both'],
                         'involves_suspect': conv['involves_suspect'],
                         'involves_peer': conv['involves_peer'],
-                        'is_messaging': is_messaging
+                        'is_messaging': is_messaging,
+                        'peer_device': conv['peer_device'],
+                        'connection_rate': conv['connection_rate']
                     })
             
             # Sort by involvement with suspect
