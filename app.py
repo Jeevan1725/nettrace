@@ -6,6 +6,21 @@ app.py - NetTrace (Beautiful Idea #1 UI + Live Capture from Idea #2)
 - Communication Proof tab with local peer detection
 """
 
+import dash
+from dash import dcc, html, Input, Output, State, callback
+import plotly.express as px
+import plotly.graph_objects as go
+import pandas as pd
+import networkx as nx
+import base64
+import tempfile
+import os
+from datetime import datetime
+import json  
+
+from capture_parser import PCAPParser
+from flow_analyzer import FlowAnalyzer, BehaviorProfiler
+from live_capture import LiveCapture
 
 # ────────────────────────────────────────────────
 # Initialize Dash app
